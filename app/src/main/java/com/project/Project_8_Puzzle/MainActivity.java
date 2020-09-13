@@ -15,10 +15,10 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout BaseLayout;
-    ArrayList<ButtonPuzzle> listPuzzle;
-    Random r =new Random();
-    int stateNow=8;
+    LinearLayout BaseLayout;//mau add instanceof tapi error siapa tau yongki mau benerin
+    ArrayList<ButtonPuzzle> listPuzzle;//list Button Puzzle
+    Random r =new Random();//declare random
+    int stateNow=9;//state sekarang yang kosong = 9 karena angka random 9 yang mewakili kosong
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,25 +81,34 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
-    public void swap(Button b1,Button b2){
+    public void swap(Button b1,Button b2){// swap antara kosong dan yang di tekan
         String tmp=b2.getText().toString();
         b2.setText(b1.getText());
         b1.setText(tmp);
-        stateNow=(int)b1.getTag();
+        stateNow=(int)b1.getTag();// isi state kosong yang baru
     }
+
     public void random(){
-        String tmpRandom="";
+        //Random angka yanga ada di button
+        //masih kurang random posisi button kosongnya
+
+        String tmpRandom="";//tmpRandom untuk check apakah angka random sudah ada atau belum
         Integer random=-1;
-        for (int i = 0; i< listPuzzle.size()-1;i++) {
+        Boolean isEmpty=false;
+        for (int i = 0; i< listPuzzle.size();i++) {
             do{
-                random = r.nextInt(9);
+                random = r.nextInt(9)+1;
                 Log.i("myApp", "random: "+random);
                 Log.i("myApp", "Boolean : "+tmpRandom.matches("(.*)"+random.toString()+"(.*)"));
                 Log.i("myApp", "Boolean : "+tmpRandom);
             }while(tmpRandom.matches("(.*)"+random.toString()+"(.*)"));
+
             tmpRandom=tmpRandom+random.toString();
             listPuzzle.get(i).getBtn().setText(random.toString());
-            if(random==9){
+
+            if(random==stateNow&&!isEmpty){// untuk yang kosong
+                stateNow=i;
+                isEmpty=true;
                 listPuzzle.get(i).getBtn().setText("");
             }
         }
