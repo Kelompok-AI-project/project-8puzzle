@@ -15,11 +15,11 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout BaseLayout;//mau add instanceof tapi error siapa tau yongki mau benerin
     ArrayList<ButtonPuzzle> listPuzzle;//list Button Puzzle
     Random r =new Random();//declare random
     int stateNow=9;//state sekarang yang kosong = 9 karena angka random 9 yang mewakili kosong
 
+    Button restart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,15 +47,8 @@ public class MainActivity extends AppCompatActivity {
 //                });
 //            }
 //        }
-        listPuzzle.add(new ButtonPuzzle((Button)findViewById(R.id.b1),0,0));
-        listPuzzle.add(new ButtonPuzzle((Button)findViewById(R.id.b2),1,0));
-        listPuzzle.add(new ButtonPuzzle((Button)findViewById(R.id.b3),2,0));
-        listPuzzle.add(new ButtonPuzzle((Button)findViewById(R.id.b4),3,0));
-        listPuzzle.add(new ButtonPuzzle((Button)findViewById(R.id.b5),4,0));
-        listPuzzle.add(new ButtonPuzzle((Button)findViewById(R.id.b6),5,0));
-        listPuzzle.add(new ButtonPuzzle((Button)findViewById(R.id.b7),6,0));
-        listPuzzle.add(new ButtonPuzzle((Button)findViewById(R.id.b8),7,0));
-        listPuzzle.add(new ButtonPuzzle((Button)findViewById(R.id.b9),8,0));
+        restart = findViewById(R.id.btnRestart);
+        addButtons(listPuzzle); //add button ke array button
 
         for (int i = 0; i< listPuzzle.size();i++) {
             Button btnClick = listPuzzle.get(i).getBtn();
@@ -64,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Button btn=(Button)view;
                     int lokasi = (int)btn.getTag();
-//                    Log.i("myApp", "onClick: "+stateNow+ " "+lokasi);
                     if(stateNow-3==lokasi){//swap atas
                         swap(btn,listPuzzle.get(stateNow).getBtn());
                     }
@@ -77,10 +69,50 @@ public class MainActivity extends AppCompatActivity {
                     else if(stateNow-1==lokasi&&(stateNow)%3!=0){//swap kiri
                         swap(btn,listPuzzle.get(stateNow).getBtn());
                     }
+
+                    if(checkWin()){
+                        for (int j = 0; j < listPuzzle.size(); j++) {
+                            Button b = listPuzzle.get(j).getBtn();
+                            b.setEnabled(false);
+                        }
+                        Toast.makeText(MainActivity.this, "You Wins!!!", Toast.LENGTH_LONG).show();
+                        restart.setVisibility(View.VISIBLE); //tampilkan button restart
+                    }
+
                 }
             });
         }
     }
+
+    public void restart_onclick(View view) {
+        listPuzzle.clear();
+        init();
+        random();
+
+        for (int j = 0; j < listPuzzle.size(); j++) {
+            Button b = listPuzzle.get(j).getBtn();
+            b.setEnabled(true);
+        }
+
+        restart.setVisibility(View.INVISIBLE);
+    }
+
+
+    public void cheat_onclick(View view) {
+        //-1 karna tidak cetak angka 9
+        for (int i = 0; i < listPuzzle.size()-1; i++) {
+            Button btn = listPuzzle.get(i).getBtn();
+            btn.setText((i+1)+"");
+            listPuzzle.get(i).setLokasi(i);
+            int lokasi = listPuzzle.get(i).getLokasi();
+            btn.setTag(lokasi);
+        }
+
+        Button btn = listPuzzle.get(8).getBtn();
+        btn.setText("");
+        stateNow = 9;
+    }
+
     public void swap(Button b1,Button b2){// swap antara kosong dan yang di tekan
         String tmp=b2.getText().toString();
         b2.setText(b1.getText());
@@ -89,8 +121,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void random(){
-        //Random angka yanga ada di button
-        //masih kurang random posisi button kosongnya
+        //Random angka yang ada di button
 
         String tmpRandom="";//tmpRandom untuk check apakah angka random sudah ada atau belum
         Integer random=-1;
@@ -113,4 +144,36 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    
+    public void addButtons(ArrayList<ButtonPuzzle> list){
+        list.add(new ButtonPuzzle((Button)findViewById(R.id.b1),0,0));
+        list.add(new ButtonPuzzle((Button)findViewById(R.id.b2),1,0));
+        list.add(new ButtonPuzzle((Button)findViewById(R.id.b3),2,0));
+        list.add(new ButtonPuzzle((Button)findViewById(R.id.b4),3,0));
+        list.add(new ButtonPuzzle((Button)findViewById(R.id.b5),4,0));
+        list.add(new ButtonPuzzle((Button)findViewById(R.id.b6),5,0));
+        list.add(new ButtonPuzzle((Button)findViewById(R.id.b7),6,0));
+        list.add(new ButtonPuzzle((Button)findViewById(R.id.b8),7,0));
+        list.add(new ButtonPuzzle((Button)findViewById(R.id.b9),8,0));
+    }
+    
+    public boolean checkWin(){
+
+        ArrayList<String> goalState = new ArrayList<>();
+        for (int i = 1; i < 10; i++) {
+            goalState.add(i+"");
+        }
+
+        // -1 karena tidak cek tombol kosong terakhir
+        for (int i = 0; i < listPuzzle.size()-1; i++) {
+            Button btn = listPuzzle.get(i).getBtn();
+            if(!btn.getText().toString().equals(goalState.get(i))){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
 }
