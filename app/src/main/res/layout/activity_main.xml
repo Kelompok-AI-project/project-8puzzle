@@ -82,6 +82,16 @@
             android:onClick="cheat_onclick"
             android:text="Cheat" />
 
+        <Button
+            android:id="@+id/btnDFS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:background="#3EDC84"
+            android:onClick="dfs_onclick"
+            android:text="DFS" />
+
     </LinearLayout>
 
 </LinearLayout>

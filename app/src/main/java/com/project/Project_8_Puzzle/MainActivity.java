@@ -12,12 +12,24 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
+
+    String TAG="myApp";
 
     ArrayList<ButtonPuzzle> listPuzzle;//list Button Puzzle
     Random r =new Random();//declare random
     int stateNow=9;//state sekarang yang kosong = 9 karena angka random 9 yang mewakili kosong
+    int jalan=0;
+    //winstate
+    String WinState="123456789";
+    //
+
+    // DFS
+    Stack<String> stackDFSOpen= new Stack<>();
+    Stack<String> stackDFSClose= new Stack<>();
+    //
 
     Button restart;
     @Override
@@ -30,23 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void init(){
         listPuzzle= new ArrayList<>();
-//        BaseLayout = findViewById(R.id.BaseLayout);
-//        int location=0;
-//        for (int i = 0; i< BaseLayout.getChildCount();i++){
-//            View v = BaseLayout.getChildAt(i);
-//            if(v instanceof Button){
-//                Button vBtn = (Button) v;
-//                ButtonPuzzle btnPuzzle=new ButtonPuzzle(vBtn,location,0);
-//                listPuzzle.add(btnPuzzle);
-//                vBtn.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Button btn = (Button)view;
-//                        Toast.makeText(MainActivity.this, btn.getText(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
-//        }
         restart = findViewById(R.id.btnRestart);
         addButtons(listPuzzle); //add button ke array button
 
@@ -96,7 +91,147 @@ public class MainActivity extends AppCompatActivity {
 
         restart.setVisibility(View.INVISIBLE);
     }
+    boolean win=false;
+    public void dfs_onclick(View view) {
+        stackDFSOpen.push(getState());
+        String x="";
+        while(!stackDFSOpen.empty()&&!win){
+            x=stackDFSOpen.iterator().next();
+            stackDFSOpen.remove(x);
 
+//            jalan++;
+//            if(jalan%5000==0){
+//                Log.i(TAG, "dfs_onclick: state "+jalan);
+//            }
+
+
+            int pos = x.indexOf("9");
+//            Log.i(TAG, "dfs_onclick: "+pos);
+//            Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
+//            Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
+//            Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
+            if(x.equals(WinState)){
+                stackDFSClose.add(x);
+                //berhasil
+//                while(stackDFSOpen.iterator().hasNext()){
+//                    x =stackDFSOpen.iterator().next();
+//                    Log.i(TAG, "dfs_onclick: Open : "+x);
+//                    Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
+//                    Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
+//                    Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
+//                    stackDFSOpen.remove(stackDFSOpen.iterator().next());
+//                }
+//
+                while(stackDFSClose.iterator().hasNext()){
+                    x =stackDFSClose.iterator().next();
+                    Log.i(TAG, "dfs_onclick: Close : "+x);
+                    Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
+                    Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
+                    Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
+                    stackDFSClose.remove(stackDFSClose.iterator().next());
+                }
+                Log.i(TAG, "dfs_onclick: "+stackDFSOpen);
+                Log.i(TAG, "dfs_onclick: "+stackDFSClose);
+                Log.i(TAG, "dfs_onclick: Berhasil ");
+                win=true;
+            }else{
+                stackDFSClose.add(x);
+                String temp="";
+                temp = down(x, pos);
+                if (!(temp.equals("-1")))
+                    stackDFSOpen.add(temp);
+                temp = right(x, pos);
+                if (!(temp.equals("-1")))
+                    stackDFSOpen.add(temp);
+                temp = left(x, pos);
+                if (!(temp.equals("-1")))
+                    stackDFSOpen.add(temp);
+                temp = up(x, pos);
+                if (!(temp.equals("-1")))
+                     stackDFSOpen.add(temp);
+            }
+        }
+    }
+
+    /*
+     * MOVEMENT UP
+     */
+    public String up(String s, int p) {
+        String str = s;
+        if (!(p < 3)) {
+            char a = str.charAt(p - 3);
+            String newS = str.substring(0, p) + a + str.substring(p + 1);
+            str = newS.substring(0, (p - 3)) + '9' + newS.substring(p - 2);
+        }
+        // Eliminates child of X if its on OPEN or CLOSED
+        if (!stackDFSOpen.contains(str)  && !stackDFSClose.contains(str))
+            return str;
+        else
+            return "-1";
+    }
+
+    /*
+     * MOVEMENT DOWN
+     */
+    public String down(String s, int p) {
+        String str = s;
+        if (!(p > 5)) {
+            char a = str.charAt(p + 3);
+            String newS = str.substring(0, p) + a + str.substring(p + 1);
+            str = newS.substring(0, (p + 3)) + '9' + newS.substring(p + 4);
+        }
+
+        // Eliminates child of X if its on OPEN or CLOSED
+        if (!stackDFSOpen.contains(str) && !stackDFSClose.contains(str))
+            return str;
+        else
+            return "-1";
+    }
+
+    /*
+     * MOVEMENT LEFT
+     */
+    public String left(String s, int p) {
+        String str = s;
+        if (p%3!=0) {
+            char a = str.charAt(p - 1);
+            String newS = str.substring(0, p) + a + str.substring(p + 1);
+            str = newS.substring(0, (p - 1)) + '9' + newS.substring(p);
+        }
+        // Eliminates child of X if its on OPEN or CLOSED
+        if (!stackDFSOpen.contains(str) && !stackDFSClose.contains(str))
+            return str;
+        else
+            return "-1";
+    }
+
+    /*
+     * MOVEMENT RIGHT
+     */
+    public String right(String s, int p) {
+        String str = s;
+        if (p != 2 && p != 5 && p != 8) {
+            char a = str.charAt(p + 1);
+            String newS = str.substring(0, p) + a + str.substring(p + 1);
+            str = newS.substring(0, (p + 1)) + '9' + newS.substring(p + 2);
+        }
+        // Eliminates child of X if its on OPEN or CLOSED
+        if (!stackDFSOpen.contains(str) && !stackDFSClose.contains(str))
+            return str;
+        else
+            return "-1";
+    }
+
+    public String getState(){
+        String stateNow="";
+        for (ButtonPuzzle btn:listPuzzle) {
+            stateNow=stateNow+btn.getBtn().getText().toString();
+            if(btn.getBtn().getText().toString()==""){
+                stateNow=stateNow+9;
+            }
+        }
+        return stateNow;
+    }
 
     public void cheat_onclick(View view) {
         //-1 karna tidak cetak angka 9
@@ -110,6 +245,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button btn = listPuzzle.get(8).getBtn();
         btn.setText("");
+        swap(listPuzzle.get(4).getBtn(),listPuzzle.get(7).getBtn());
+        swap(listPuzzle.get(4).getBtn(),listPuzzle.get(8).getBtn());
         stateNow = 9;
     }
 
@@ -129,9 +266,9 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i< listPuzzle.size();i++) {
             do{
                 random = r.nextInt(9)+1;
-                Log.i("myApp", "random: "+random);
-                Log.i("myApp", "Boolean : "+tmpRandom.matches("(.*)"+random.toString()+"(.*)"));
-                Log.i("myApp", "Boolean : "+tmpRandom);
+//                Log.i("myApp", "random: "+random);
+//                Log.i("myApp", "Boolean : "+tmpRandom.matches("(.*)"+random.toString()+"(.*)"));
+//                Log.i("myApp", "Boolean : "+tmpRandom);
             }while(tmpRandom.matches("(.*)"+random.toString()+"(.*)"));
 
             tmpRandom=tmpRandom+random.toString();
