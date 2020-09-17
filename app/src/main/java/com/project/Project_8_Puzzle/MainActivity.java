@@ -1,6 +1,8 @@
 package com.project.Project_8_Puzzle;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -11,6 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 
@@ -29,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
     // DFS
     Stack<String> stackDFSOpen= new Stack<>();
     Stack<String> stackDFSClose= new Stack<>();
+    //
+
+    // BFS
+    Queue<String> queueBFSOpen = new LinkedList<>();
+    Stack<String> stackBFSClose= new Stack<>();
+    Stack<String> stackBFSSuccess= new Stack<>();
     //
 
     Button restart;
@@ -149,6 +161,46 @@ public class MainActivity extends AppCompatActivity {
                 temp = up(x, pos);
                 if (!(temp.equals("-1")))
                      stackDFSOpen.add(temp);
+            }
+        }
+    }
+
+    public void bfs_onclick(View view) {
+        queueBFSOpen.add(getState());
+        String x="";
+        while(!queueBFSOpen.isEmpty()&&!win){
+            x=queueBFSOpen.peek();
+            queueBFSOpen.remove(x);
+            int pos = x.indexOf("9");
+            stackBFSClose.add(x);
+            if(x.equals(WinState)){
+//
+                while(stackBFSClose.iterator().hasNext()){
+                    x =stackBFSClose.iterator().next();
+                    Log.i(TAG, "dfs_onclick: Close : "+x);
+                    Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
+                    Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
+                    Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
+                    stackBFSClose.remove(stackBFSClose.iterator().next());
+                }
+                Log.i(TAG, "dfs_onclick: "+stackBFSClose);
+                Log.i(TAG, "dfs_onclick: "+stackBFSClose);
+                Log.i(TAG, "dfs_onclick: Berhasil ");
+                win=true;
+            }else{
+                String temp="";
+                temp = down(x, pos);
+                if (!(temp.equals("-1")))
+                    queueBFSOpen.add(temp);
+                temp = right(x, pos);
+                if (!(temp.equals("-1")))
+                    queueBFSOpen.add(temp);
+                temp = left(x, pos);
+                if (!(temp.equals("-1")))
+                    queueBFSOpen.add(temp);
+                temp = up(x, pos);
+                if (!(temp.equals("-1")))
+                    queueBFSOpen.add(temp);
             }
         }
     }
