@@ -166,11 +166,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void bfs_onclick(View view) {
         queueBFSOpen.add(getState());
-        bfs parentBfs = new bfs(getState());
+        bfs grandParent = new bfs(getState());
         String x="";
+        lBfs.add(grandParent);
+        int index = 0;
         while(!queueBFSOpen.isEmpty()&&!win){
             x=queueBFSOpen.peek();
-//            bfs parentBfs = new bfs(x);
+            bfs parent = new bfs(x,lBfs.get(index));
             stackBFSClose.add(x);
 //            if(stackDFSClose==null){
 //                ClassstackBFSClose=new bfs(stackBFSClose,null,"");
@@ -180,14 +182,24 @@ public class MainActivity extends AppCompatActivity {
 
             if(x.equals(WinState)){
 //              stac
-                while(stackBFSClose.iterator().hasNext()){
-                    x =stackBFSClose.iterator().next();
+//                while(stackBFSClose.iterator().hasNext()){
+//                    x =stackBFSClose.iterator().next();
+//                    Log.i(TAG, "dfs_onclick: Close : "+x);
+//                    Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
+//                    Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
+//                    Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
+//                    stackBFSClose.remove(stackBFSClose.iterator().next());
+//                }
+                bfs lastBfs = lBfs.get(lBfs.size()-1);
+                while (parent.parent!=null){
+                    x = parent.now;
                     Log.i(TAG, "dfs_onclick: Close : "+x);
                     Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
                     Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
                     Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
-                    stackBFSClose.remove(stackBFSClose.iterator().next());
+                    parent = parent.parent;
                 }
+
                 Log.i(TAG, "dfs_onclick: "+stackBFSClose);
                 Log.i(TAG, "dfs_onclick: "+stackBFSClose);
                 Log.i(TAG, "dfs_onclick: Berhasil ");
@@ -197,21 +209,28 @@ public class MainActivity extends AppCompatActivity {
                 temp = down(x, pos);
                 if (!(temp.equals("-1"))){
                     queueBFSOpen.add(temp);
-                    lBfs.add(new bfs(temp,parentBfs));
+                    lBfs.add(new bfs(temp,parent));
+                }
+                temp = up(x, pos);
+                if (!(temp.equals("-1"))){
+                    queueBFSOpen.add(temp);
+                    lBfs.add(new bfs(temp,parent));
                 }
 
-
-
-                temp = up(x, pos);
-                if (!(temp.equals("-1")))
-                    queueBFSOpen.add(temp);
                 temp = left(x, pos);
-                if (!(temp.equals("-1")))
+                if (!(temp.equals("-1"))){
                     queueBFSOpen.add(temp);
+                    lBfs.add(new bfs(temp,parent));
+                }
+
                 temp = right(x, pos);
-                if (!(temp.equals("-1")))
+                if (!(temp.equals("-1"))){
                     queueBFSOpen.add(temp);
+                    lBfs.add(new bfs(temp,parent));
+                }
             }
+            grandParent = parent.parent;
+
         }
     }
 
