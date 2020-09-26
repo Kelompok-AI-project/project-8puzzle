@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
     // BFS
     Queue<String> queueBFSOpen = new LinkedList<>();
     Stack<String> stackBFSClose= new Stack<>();
-    bfs ClassstackBFSClose ;
-    //
+    ArrayList<bfs> lBfs = new ArrayList<>();
 
     Button restart;
     @Override
@@ -167,20 +166,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void bfs_onclick(View view) {
         queueBFSOpen.add(getState());
+        bfs parentBfs = new bfs(getState());
         String x="";
         while(!queueBFSOpen.isEmpty()&&!win){
             x=queueBFSOpen.peek();
+//            bfs parentBfs = new bfs(x);
             stackBFSClose.add(x);
-            if(stackDFSClose==null){
-                ClassstackBFSClose=new bfs(stackBFSClose,null,"");
-            }
+//            if(stackDFSClose==null){
+//                ClassstackBFSClose=new bfs(stackBFSClose,null,"");
+//            }
             queueBFSOpen.remove(x);
             int pos = x.indexOf("9");
 
-
-
             if(x.equals(WinState)){
-//
+//              stac
                 while(stackBFSClose.iterator().hasNext()){
                     x =stackBFSClose.iterator().next();
                     Log.i(TAG, "dfs_onclick: Close : "+x);
@@ -198,18 +197,18 @@ public class MainActivity extends AppCompatActivity {
                 temp = down(x, pos);
                 if (!(temp.equals("-1"))){
                     queueBFSOpen.add(temp);
-                    bfs Bfsnow = new bfs(stackBFSClose,null,"");
-                    ClassstackBFSClose.child=Bfsnow;
+                    lBfs.add(new bfs(temp,parentBfs));
                 }
 
 
-                temp = right(x, pos);
+
+                temp = up(x, pos);
                 if (!(temp.equals("-1")))
                     queueBFSOpen.add(temp);
                 temp = left(x, pos);
                 if (!(temp.equals("-1")))
                     queueBFSOpen.add(temp);
-                temp = up(x, pos);
+                temp = right(x, pos);
                 if (!(temp.equals("-1")))
                     queueBFSOpen.add(temp);
             }
@@ -227,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
             str = newS.substring(0, (p - 3)) + '9' + newS.substring(p - 2);
         }
         // Eliminates child of X if its on OPEN or CLOSED
-        if (!stackDFSOpen.contains(str)  && !stackDFSClose.contains(str))
+        if (!queueBFSOpen.contains(str)  && !stackBFSClose.contains(str))
             return str;
         else
             return "-1";
@@ -245,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Eliminates child of X if its on OPEN or CLOSED
-        if (!stackDFSOpen.contains(str) && !stackDFSClose.contains(str))
+        if (!queueBFSOpen.contains(str) && !stackBFSClose.contains(str))
             return str;
         else
             return "-1";
@@ -262,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
             str = newS.substring(0, (p - 1)) + '9' + newS.substring(p);
         }
         // Eliminates child of X if its on OPEN or CLOSED
-        if (!stackDFSOpen.contains(str) && !stackDFSClose.contains(str))
+        if (!queueBFSOpen.contains(str) && !stackBFSClose.contains(str))
             return str;
         else
             return "-1";
@@ -279,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
             str = newS.substring(0, (p + 1)) + '9' + newS.substring(p + 2);
         }
         // Eliminates child of X if its on OPEN or CLOSED
-        if (!stackDFSOpen.contains(str) && !stackDFSClose.contains(str))
+        if (!queueBFSOpen.contains(str) && !stackBFSClose.contains(str))
             return str;
         else
             return "-1";

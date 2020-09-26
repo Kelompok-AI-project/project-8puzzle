@@ -3,37 +3,18 @@ package com.project.Project_8_Puzzle;
 import java.util.Stack;
 
 public class bfs {
-    Stack<String> parent;
-    bfs child;
-    String state_parent;
+    public String now;
+    public bfs parent;
 
-    public bfs(Stack<String> parent, bfs child, String state_parent) {
+
+    public bfs(String now) {
+        this.now = now;
+        parent = null;
+    }
+
+
+    public bfs(String now, bfs parent) {
+        this.now = now;
         this.parent = parent;
-        this.child = child;
-        this.state_parent = state_parent;
-    }
-
-    public Stack<String> getParent() {
-        return parent;
-    }
-
-    public void setParent(Stack<String> parent) {
-        this.parent = parent;
-    }
-
-    public bfs getChild() {
-        return child;
-    }
-
-    public void setChild(bfs child) {
-        this.child = child;
-    }
-
-    public String getState_parent() {
-        return state_parent;
-    }
-
-    public void setState_parent(String state_parent) {
-        this.state_parent = state_parent;
     }
 }
