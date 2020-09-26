@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     // BFS
     Queue<String> queueBFSOpen = new LinkedList<>();
     Stack<String> stackBFSClose= new Stack<>();
-    Stack<String> stackBFSSuccess= new Stack<>();
+    bfs ClassstackBFSClose ;
     //
 
     Button restart;
@@ -170,9 +170,15 @@ public class MainActivity extends AppCompatActivity {
         String x="";
         while(!queueBFSOpen.isEmpty()&&!win){
             x=queueBFSOpen.peek();
+            stackBFSClose.add(x);
+            if(stackDFSClose==null){
+                ClassstackBFSClose=new bfs(stackBFSClose,null,"");
+            }
             queueBFSOpen.remove(x);
             int pos = x.indexOf("9");
-            stackBFSClose.add(x);
+
+
+
             if(x.equals(WinState)){
 //
                 while(stackBFSClose.iterator().hasNext()){
@@ -190,8 +196,13 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 String temp="";
                 temp = down(x, pos);
-                if (!(temp.equals("-1")))
+                if (!(temp.equals("-1"))){
                     queueBFSOpen.add(temp);
+                    bfs Bfsnow = new bfs(stackBFSClose,null,"");
+                    ClassstackBFSClose.child=Bfsnow;
+                }
+
+
                 temp = right(x, pos);
                 if (!(temp.equals("-1")))
                     queueBFSOpen.add(temp);
