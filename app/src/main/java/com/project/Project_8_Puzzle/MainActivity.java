@@ -24,12 +24,16 @@ public class MainActivity extends AppCompatActivity {
 
     String TAG="myApp";
 
+    Button btnNext,btnPrev ;
+
     ArrayList<ButtonPuzzle> listPuzzle;//list Button Puzzle
     Random r =new Random();//declare random
     int stateNow=9;//state sekarang yang kosong = 9 karena angka random 9 yang mewakili kosong
     int jalan=0;
     //winstate
     String WinState="123456789";
+    ArrayList<String> stateJawaban=new ArrayList<>(); // tampung jawaban
+    int stateJawabanNow=-1; // tampung index jawaban yang sekarang supaya bisa di next / prev
     //
 
     // DFS
@@ -47,8 +51,42 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        btnPrev=findViewById(R.id.btnPref);
+        btnNext=findViewById(R.id.btnNext);
+
+        btnPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(stateJawabanNow>0){
+                    stateJawabanNow--;
+                    gantiTextButton(stateJawaban.get(stateJawabanNow));
+                }
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(stateJawabanNow<stateJawaban.size()-1){
+                    stateJawabanNow++;
+                    gantiTextButton(stateJawaban.get(stateJawabanNow));
+                }
+            }
+        });
+
         init();
         random();
+    }
+
+    public void gantiTextButton(String text){
+        for (int i = 0; i < listPuzzle.size(); i++) {
+            String potong =text.substring(i,i+1);
+            listPuzzle.get(i).getBtn().setText(potong);
+            if(potong.equals("9")){
+                listPuzzle.get(i).getBtn().setText("");
+            }
+        }
     }
 
     public void init(){
@@ -165,73 +203,88 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bfs_onclick(View view) {
+        queueBFSOpen = new LinkedList<>();
+        stackBFSClose= new Stack<>();
+        lBfs = new ArrayList<>();
         queueBFSOpen.add(getState());
-        bfs grandParent = new bfs(getState());
+        lBfs.add(new bfs(getState(),""));
         String x="";
-        lBfs.add(grandParent);
-        int index = 0;
         while(!queueBFSOpen.isEmpty()&&!win){
             x=queueBFSOpen.peek();
-            bfs parent = new bfs(x,lBfs.get(index));
             stackBFSClose.add(x);
-//            if(stackDFSClose==null){
-//                ClassstackBFSClose=new bfs(stackBFSClose,null,"");
-//            }
+
             queueBFSOpen.remove(x);
             int pos = x.indexOf("9");
 
+            jalan++;
+            if(jalan%5000==0){
+                Log.i(TAG, "bfs_onclick: state "+jalan);
+            }
+
             if(x.equals(WinState)){
-//              stac
-//                while(stackBFSClose.iterator().hasNext()){
-//                    x =stackBFSClose.iterator().next();
-//                    Log.i(TAG, "dfs_onclick: Close : "+x);
-//                    Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
-//                    Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
-//                    Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
-//                    stackBFSClose.remove(stackBFSClose.iterator().next());
-//                }
-                bfs lastBfs = lBfs.get(lBfs.size()-1);
-                while (parent.parent!=null){
-                    x = parent.now;
-                    Log.i(TAG, "dfs_onclick: Close : "+x);
-                    Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
-                    Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
-                    Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
-                    parent = parent.parent;
+
+                stateJawabanNow=0;
+                int idx=-1;
+                for (int i = 0; i < lBfs.size()-1; i++) {
+                    if(lBfs.get(i).now.equals(x)){
+                        idx=i;
+                        break;
+                    }
                 }
 
-                Log.i(TAG, "dfs_onclick: "+stackBFSClose);
-                Log.i(TAG, "dfs_onclick: "+stackBFSClose);
-                Log.i(TAG, "dfs_onclick: Berhasil ");
+                bfs lastBfs=lBfs.get(idx);
+
+                while(!lastBfs.parent.equals("")){
+                    for (int i = 0; i < lBfs.size()-1; i++) {
+                        if(lastBfs.parent.equals(lBfs.get(i).now) ){
+                            stateJawaban.add(lastBfs.now);
+                            lastBfs=lBfs.get(i);
+                            i=0;
+                        }
+                    }
+                }
+
+                stateJawaban.add(lastBfs.now);
+                Log.i(TAG, "bfs_onclick: "+stateJawaban);
+                Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "bfs_onclick: Berhasil ");
                 win=true;
             }else{
                 String temp="";
                 temp = down(x, pos);
                 if (!(temp.equals("-1"))){
                     queueBFSOpen.add(temp);
-                    lBfs.add(new bfs(temp,parent));
+                    lBfs.add(new bfs(temp,x));
                 }
                 temp = up(x, pos);
                 if (!(temp.equals("-1"))){
                     queueBFSOpen.add(temp);
-                    lBfs.add(new bfs(temp,parent));
+                    lBfs.add(new bfs(temp,x));
                 }
 
                 temp = left(x, pos);
                 if (!(temp.equals("-1"))){
                     queueBFSOpen.add(temp);
-                    lBfs.add(new bfs(temp,parent));
+                    lBfs.add(new bfs(temp,x));
                 }
 
                 temp = right(x, pos);
                 if (!(temp.equals("-1"))){
                     queueBFSOpen.add(temp);
-                    lBfs.add(new bfs(temp,parent));
+                    lBfs.add(new bfs(temp,x));
                 }
             }
-            grandParent = parent.parent;
+
 
         }
+    }
+
+    public void cetak(String s){
+        String x =s;
+        Log.i(TAG, "dfs_onclick: Close : "+x);
+        Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
+        Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
+        Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
     }
 
     /*

@@ -93,5 +93,28 @@
             android:text="BFS" />
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:background="#3EDC84"
+            android:text="Prev" />
+
+        <Button
+            android:id="@+id/btnPref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:background="#3EDC84"
+            android:text="Next" />
+
+    </LinearLayout>
 
 </LinearLayout>
