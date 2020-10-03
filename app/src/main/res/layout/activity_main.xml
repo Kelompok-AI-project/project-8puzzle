@@ -62,15 +62,15 @@
         android:layout_height="wrap_content"
         >
         <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Restart"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp"
-        android:background="#26B3F3"
-        android:visibility="invisible"
-        android:onClick="restart_onclick"
-        android:id="@+id/btnRestart" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restart"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:background="#26B3F3"
+            android:visibility="invisible"
+            android:onClick="restart_onclick"
+            android:id="@+id/btnRestart" />
 
         <Button
             android:id="@+id/btnWin"
@@ -89,16 +89,15 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="30dp"
             android:background="#3EDC84"
-            android:onClick="bfs_onclick"
+            android:onClick="astar_onclick"
             android:text="BFS" />
-
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
         <Button
-            android:id="@+id/btnNext"
+            android:id="@+id/btnPref"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -107,7 +106,7 @@
             android:text="Prev" />
 
         <Button
-            android:id="@+id/btnPref"
+            android:id="@+id/btnNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
