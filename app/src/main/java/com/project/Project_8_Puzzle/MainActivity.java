@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             b.setEnabled(true);
         }
 
-        restart.setVisibility(View.INVISIBLE);
+        //restart.setVisibility(View.INVISIBLE);
     }
     boolean win=false;
 
