@@ -30,13 +30,14 @@ import java.util.Stack;
 public class MainActivity extends AppCompatActivity {
 
     String TAG="myApp";
-    TextView langkah;
+    TextView langkah, langkahke;
     Button btnNext,btnPrev ;
 
     ArrayList<ButtonPuzzle> listPuzzle;//list Button Puzzle
     Random r =new Random();//declare random
     int stateNow=9;//state sekarang yang kosong = 9 karena angka random 9 yang mewakili kosong
     int jalan=0;
+    int step=0;
     //winstate
     String WinState="123456789";
     ArrayList<String> stateJawaban=new ArrayList<>(); // tampung jawaban
@@ -109,11 +110,14 @@ public class MainActivity extends AppCompatActivity {
         btnNext=findViewById(R.id.btnNext);
         proses=findViewById(R.id.idProses);
         langkah=findViewById(R.id.tvtLangkah);
+        langkahke=findViewById(R.id.tvlangkahke);
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(stateJawabanNow>0){
                     stateJawabanNow--;
+                    step--;
+                    langkahke.setText("Langkah ke: "+step);
                     gantiTextButton(stateJawaban.get(stateJawabanNow));
                 }
             }
@@ -124,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(stateJawabanNow<stateJawaban.size()-1){
                     stateJawabanNow++;
+                    step++;
+                    langkahke.setText("Langkah ke: "+step);
                     gantiTextButton(stateJawaban.get(stateJawabanNow));
                 }
             }
@@ -203,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
         bfs x1=null;
         bfs x2=null;
         jalan=0;
+        step=0;
         win=false;
         while(!queueBDR1Open.isEmpty()&&!queueBDR2Open.isEmpty()&&!win){
             x1=queueBDR1Open.peek();
@@ -263,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
                 stateJawaban.add(lastBfs2.now);
 
 
-                langkah.setText("Langkah: "+jalan);
+                langkah.setText("Banyak langkah: "+jalan);
                 Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "bfs_onclick: Berhasil ");
                 win=true;
@@ -391,6 +398,7 @@ public class MainActivity extends AppCompatActivity {
         stateJawaban.clear();
         win=false;
         jalan=0;
+        step=0;
         String x="";
         while(!pkAsterOpen.isEmpty()&&!win){
             x=pkAsterOpen.peek().now;
@@ -418,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 stateNow=8;
 
-                langkah.setText("Langkah: "+jalan);
+                langkah.setText("Banyak langkah: "+jalan);
                 Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "bfs_onclick: Berhasil ");
                 win=true;
@@ -526,6 +534,7 @@ public class MainActivity extends AppCompatActivity {
         win=false;
         String x="";
         jalan=0;
+        step=0;
         int ind=0;
         while(!queueBFSOpen.isEmpty()&&!win){
             x=queueBFSOpen.peek().now;

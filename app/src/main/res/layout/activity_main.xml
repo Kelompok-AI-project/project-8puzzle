@@ -15,7 +15,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingTop="20dp">
             <Button
                 android:id="@+id/b1"
                 android:layout_width="120dp"
@@ -31,7 +34,9 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
             <Button
                 android:id="@+id/b4"
                 android:layout_width="120dp"
@@ -47,7 +52,9 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
             <Button
                 android:id="@+id/b7"
                 android:layout_width="120dp"
@@ -64,13 +71,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="5dp">
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Restart"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="10dp"
+                android:layout_margin="10dp"
                 android:background="#26B3F3"
                 android:id="@+id/btnRestart"
                 android:layout_weight="1"/>
@@ -79,8 +87,7 @@
                 android:id="@+id/btnWin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_margin="10dp"
                 android:background="#3EDC84"
                 android:onClick="cheat_onclick"
                 android:text="Cheat"
@@ -89,15 +96,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="5dp">
             <Button
                 android:id="@+id/btnDFS"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_margin="10dp"
                 android:background="#3EDC84"
                 android:onClick="bfs_onclick"
                 android:text="BFS"
@@ -105,8 +111,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_margin="10dp"
                 android:background="#3EDC84"
                 android:onClick="bdr_onclick"
                 android:text="Bi-Bfs"
@@ -114,8 +119,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_margin="10dp"
                 android:background="#3EDC84"
                 android:onClick="astar_onclick"
                 android:text="Astar"
@@ -124,13 +128,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"   >
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="5dp">
             <Button
                 android:id="@+id/btnPref"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_margin="10dp"
                 android:background="#3EDC84"
                 android:text="Prev"
                 android:layout_weight="1" />
@@ -139,27 +144,32 @@
                 android:id="@+id/btnNext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_margin="10dp"
                 android:background="#3EDC84"
                 android:text="Next"
                 android:layout_weight="1" />
-
         </LinearLayout>
+        <TextView
+            android:id="@+id/tvlangkahke"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Langkah ke: "
+            android:paddingTop="10dp"
+            android:layout_gravity="center"
+            android:textSize="20dp"/>
         <TextView
             android:id="@+id/tvtLangkah"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:layout_gravity="center"
-            android:text="Langkah: "/>
+            android:text="Banyak langkah: "/>
         <TextView
             android:id="@+id/idProses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Proses : diam"
             android:layout_gravity="center"
-            android:textSize="30dp"/>
-
+            android:textSize="20dp"/>
     </LinearLayout>
 </ScrollView>
