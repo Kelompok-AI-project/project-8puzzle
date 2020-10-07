@@ -1,145 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical"
-    android:id="@+id/BaseLayout">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/b1"
-            android:layout_width="120dp"
-            android:layout_height="120dp"/>
-        <Button
-            android:id="@+id/b2"
-            android:layout_width="120dp"
-            android:layout_height="120dp"/>
-        <Button
-            android:id="@+id/b3"
-            android:layout_width="120dp"
-            android:layout_height="120dp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/b4"
-            android:layout_width="120dp"
-            android:layout_height="120dp"/>
-        <Button
-            android:id="@+id/b5"
-            android:layout_width="120dp"
-            android:layout_height="120dp"/>
-        <Button
-            android:id="@+id/b6"
-            android:layout_width="120dp"
-            android:layout_height="120dp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/b7"
-            android:layout_width="120dp"
-            android:layout_height="120dp"/>
-        <Button
-            android:id="@+id/b8"
-            android:layout_width="120dp"
-            android:layout_height="120dp"/>
-        <Button
-            android:id="@+id/b9"
-            android:layout_width="120dp"
-            android:layout_height="120dp"/>
-    </LinearLayout>
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        android:orientation="vertical"
+        android:id="@+id/BaseLayout">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <Button
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/b1"
+                android:layout_width="120dp"
+                android:layout_height="120dp"/>
+            <Button
+                android:id="@+id/b2"
+                android:layout_width="120dp"
+                android:layout_height="120dp"/>
+            <Button
+                android:id="@+id/b3"
+                android:layout_width="120dp"
+                android:layout_height="120dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/b4"
+                android:layout_width="120dp"
+                android:layout_height="120dp"/>
+            <Button
+                android:id="@+id/b5"
+                android:layout_width="120dp"
+                android:layout_height="120dp"/>
+            <Button
+                android:id="@+id/b6"
+                android:layout_width="120dp"
+                android:layout_height="120dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/b7"
+                android:layout_width="120dp"
+                android:layout_height="120dp"/>
+            <Button
+                android:id="@+id/b8"
+                android:layout_width="120dp"
+                android:layout_height="120dp"/>
+            <Button
+                android:id="@+id/b9"
+                android:layout_width="120dp"
+                android:layout_height="120dp"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Restart"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="10dp"
-            android:background="#26B3F3"
-            android:id="@+id/btnRestart"
-            android:layout_weight="1"/>
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Restart"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="#26B3F3"
+                android:id="@+id/btnRestart"
+                android:layout_weight="1"/>
 
-        <Button
-            android:id="@+id/btnWin"
+            <Button
+                android:id="@+id/btnWin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:background="#3EDC84"
+                android:onClick="cheat_onclick"
+                android:text="Cheat"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
-            android:background="#3EDC84"
-            android:onClick="cheat_onclick"
-            android:text="Cheat"
-            android:layout_weight="1"/>
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnDFS"
+
+            <Button
+                android:id="@+id/btnDFS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:background="#3EDC84"
+                android:onClick="bfs_onclick"
+                android:text="BFS"
+                android:layout_weight="1" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:background="#3EDC84"
+                android:onClick="bdr_onclick"
+                android:text="Bi-Bfs"
+                android:layout_weight="1" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:background="#3EDC84"
+                android:onClick="astar_onclick"
+                android:text="Astar"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
-            android:background="#3EDC84"
-            android:onClick="bfs_onclick"
-            android:text="BFS"
-            android:layout_weight="1" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
-            android:background="#3EDC84"
-            android:onClick="bdr_onclick"
-            android:text="Bi-Bfs"
-            android:layout_weight="1" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
-            android:background="#3EDC84"
-            android:onClick="astar_onclick"
-            android:text="Astar"
-            android:layout_weight="1" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        >
-        <Button
-            android:id="@+id/btnPref"
+            android:orientation="horizontal"   >
+            <Button
+                android:id="@+id/btnPref"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:background="#3EDC84"
+                android:text="Prev"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnNext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:background="#3EDC84"
+                android:text="Next"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tvtLangkah"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
-            android:background="#3EDC84"
-            android:text="Prev" />
-
-        <Button
-            android:id="@+id/btnNext"
+            android:textSize="30dp"
+            android:layout_gravity="center"
+            android:text="Langkah: "/>
+        <TextView
+            android:id="@+id/idProses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
-            android:background="#3EDC84"
-            android:text="Next" />
+            android:text="Proses : diam"
+            android:layout_gravity="center"
+            android:textSize="30dp"/>
 
     </LinearLayout>
-    <TextView
-        android:id="@+id/idProses"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Proses : diam"
-        android:textSize="30sp"/>
-
-</LinearLayout>
+</ScrollView>

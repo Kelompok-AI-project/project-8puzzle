@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -29,7 +30,7 @@ import java.util.Stack;
 public class MainActivity extends AppCompatActivity {
 
     String TAG="myApp";
-
+    TextView langkah;
     Button btnNext,btnPrev ;
 
     ArrayList<ButtonPuzzle> listPuzzle;//list Button Puzzle
@@ -63,8 +64,7 @@ public class MainActivity extends AppCompatActivity {
     Stack<bfs> stackBDR2Close2= new Stack<>();
     //
 
-    // Astar
-    Comparator<astar> comp = new Comparator<astar>() {
+    Comparator<astar> compAsar = new Comparator<astar>() {
         @Override
         public int compare(astar s1, astar s2) {
             int a = s1.cost+s1.depth;
@@ -79,7 +79,23 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    PriorityQueue<astar> pkAsterOpen = new PriorityQueue<astar>(comp);
+    // Astar
+//    Comparator<astar> comp = new Comparator<astar>() {
+//        @Override
+//        public int compare(astar s1, astar s2) {
+//            int a = s1.cost+s1.depth;
+//            int b = s2.cost+s2.depth;
+//            if(a<b){
+//                return -1;
+//            }else if(a>b){
+//                return 1;
+//            }else{
+//                return 0;
+//            }
+//        }
+//    };
+
+    PriorityQueue<astar> pkAsterOpen = new PriorityQueue<astar>(99999,new CompareAstar());
     Stack<String> stackAstarClose= new Stack<>();
 
     Button restart;
@@ -92,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         btnPrev=findViewById(R.id.btnPref);
         btnNext=findViewById(R.id.btnNext);
         proses=findViewById(R.id.idProses);
-
+        langkah=findViewById(R.id.tvtLangkah);
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -247,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
                 stateJawaban.add(lastBfs2.now);
 
 
+                langkah.setText("Langkah: "+jalan);
                 Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "bfs_onclick: Berhasil ");
                 win=true;
@@ -400,6 +417,8 @@ public class MainActivity extends AppCompatActivity {
                     stateJawaban.add(jawaban.get(i).now);
                 }
                 stateNow=8;
+
+                langkah.setText("Langkah: "+jalan);
                 Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "bfs_onclick: Berhasil ");
                 win=true;
@@ -721,26 +740,39 @@ public class MainActivity extends AppCompatActivity {
     public void random(){
         //Random angka yang ada di button
 
-        String tmpRandom="";//tmpRandom untuk check apakah angka random sudah ada atau belum
-        Integer random=-1;
-        Boolean isEmpty=false;
-        for (int i = 0; i< listPuzzle.size();i++) {
-            do{
-                random = r.nextInt(9)+1;
-//                Log.i("myApp", "random: "+random);
-//                Log.i("myApp", "Boolean : "+tmpRandom.matches("(.*)"+random.toString()+"(.*)"));
-//                Log.i("myApp", "Boolean : "+tmpRandom);
-            }while(tmpRandom.matches("(.*)"+random.toString()+"(.*)"));
-
-            tmpRandom=tmpRandom+random.toString();
-            listPuzzle.get(i).getBtn().setText(random.toString());
-
-            if(random==stateNow&&!isEmpty){// untuk yang kosong
-                stateNow=i;
-                isEmpty=true;
-                listPuzzle.get(i).getBtn().setText("");
-            }
+//        String tmpRandom="";//tmpRandom untuk check apakah angka random sudah ada atau belum
+//        Integer random=-1;
+//        Boolean isEmpty=false;
+//        for (int i = 0; i< listPuzzle.size();i++) {
+//            do{
+//                random = r.nextInt(9)+1;
+////                Log.i("myApp", "random: "+random);
+////                Log.i("myApp", "Boolean : "+tmpRandom.matches("(.*)"+random.toString()+"(.*)"));
+////                Log.i("myApp", "Boolean : "+tmpRandom);
+//            }while(tmpRandom.matches("(.*)"+random.toString()+"(.*)"));
+//
+//            tmpRandom=tmpRandom+random.toString();
+//            listPuzzle.get(i).getBtn().setText(random.toString());
+//
+//            if(random==stateNow&&!isEmpty){// untuk yang kosong
+//                stateNow=i;
+//                isEmpty=true;
+//                listPuzzle.get(i).getBtn().setText("");
+//            }
+//        }
+        for (int i = 0; i < listPuzzle.size()-1; i++) {
+            Button btn = listPuzzle.get(i).getBtn();
+            btn.setText((i+1)+"");
+            listPuzzle.get(i).setLokasi(i);
+            int lokasi = listPuzzle.get(i).getLokasi();
+            btn.setTag(lokasi);
         }
+
+        Button btn = listPuzzle.get(8).getBtn();
+        btn.setText("");
+        swap(listPuzzle.get(4).getBtn(),listPuzzle.get(7).getBtn());
+        swap(listPuzzle.get(4).getBtn(),listPuzzle.get(8).getBtn());
+        stateNow = 4;
     }
     
     public void addButtons(ArrayList<ButtonPuzzle> list){
