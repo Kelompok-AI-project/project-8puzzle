@@ -73,7 +73,8 @@
                 android:layout_marginLeft="10dp"
                 android:background="#26B3F3"
                 android:id="@+id/btnRestart"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:onClick="restart_onclick"/>
 
             <Button
                 android:id="@+id/btnWin"

@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
             b.setEnabled(true);
         }
 
-        restart.setVisibility(View.INVISIBLE);
+        restart.setEnabled(false);
     }
     boolean win=false;
 
@@ -311,6 +311,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+
+        restart.setEnabled(true);
     }
 
     public String upBDR(String s, int p,Queue<bfs> open, Stack<String> close) {
@@ -447,6 +449,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+        restart.setEnabled(true);
     }
 
     public String upAstar(String s, int p) {
@@ -615,9 +618,8 @@ public class MainActivity extends AppCompatActivity {
                     lBfs.add(new bfs(temp,parentAdd));
                 }
             }
-
-
         }
+        restart.setEnabled(true);
     }
 
     private Object clone(Object parents) {
@@ -721,6 +723,8 @@ public class MainActivity extends AppCompatActivity {
             listPuzzle.get(i).setLokasi(i);
             int lokasi = listPuzzle.get(i).getLokasi();
             btn.setTag(lokasi);
+
+            restart.setEnabled(true);
         }
 
         Button btn = listPuzzle.get(8).getBtn();
