@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
     Stack<String> stackAstarClose= new Stack<>();
 
     Button restart;
-    TextView proses;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
         btnPrev=findViewById(R.id.btnPref);
         btnNext=findViewById(R.id.btnNext);
-        proses=findViewById(R.id.idProses);
 
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,7 +149,14 @@ public class MainActivity extends AppCompatActivity {
                         swap(btn,listPuzzle.get(stateNow).getBtn());
                     }
 
-
+                    if(checkWin()){
+                        for (int j = 0; j < listPuzzle.size(); j++) {
+                            Button b = listPuzzle.get(j).getBtn();
+                            b.setEnabled(false);
+                        }
+                        Toast.makeText(MainActivity.this, "You Wins!!!", Toast.LENGTH_LONG).show();
+                        restart.setVisibility(View.VISIBLE); //tampilkan button restart
+                    }
 
                 }
             });
@@ -172,22 +176,79 @@ public class MainActivity extends AppCompatActivity {
         restart.setVisibility(View.INVISIBLE);
     }
     boolean win=false;
+    public void dfs_onclick(View view) {
+        stackDFSOpen.push(getState());
+        String x="";
+        while(!stackDFSOpen.empty()&&!win){
+            x=stackDFSOpen.iterator().next();
+            stackDFSOpen.remove(x);
+
+//            jalan++;
+//            if(jalan%5000==0){
+//                Log.i(TAG, "dfs_onclick: state "+jalan);
+//            }
+
+
+            int pos = x.indexOf("9");
+//            Log.i(TAG, "dfs_onclick: "+pos);
+//            Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
+//            Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
+//            Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
+            if(x.equals(WinState)){
+                stackDFSClose.add(x);
+                //berhasil
+//                while(stackDFSOpen.iterator().hasNext()){
+//                    x =stackDFSOpen.iterator().next();
+//                    Log.i(TAG, "dfs_onclick: Open : "+x);
+//                    Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
+//                    Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
+//                    Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
+//                    stackDFSOpen.remove(stackDFSOpen.iterator().next());
+//                }
+//
+                while(stackDFSClose.iterator().hasNext()){
+                    x =stackDFSClose.iterator().next();
+                    Log.i(TAG, "dfs_onclick: Close : "+x);
+                    Log.i(TAG, "dfs_onclick: State 1 = "+x.substring(0,3));
+                    Log.i(TAG, "dfs_onclick: State 2 = "+x.substring(3,6));
+                    Log.i(TAG, "dfs_onclick: State 3 = "+x.substring(6,9));
+                    stackDFSClose.remove(stackDFSClose.iterator().next());
+                }
+                Log.i(TAG, "dfs_onclick: "+stackDFSOpen);
+                Log.i(TAG, "dfs_onclick: "+stackDFSClose);
+                Log.i(TAG, "dfs_onclick: Berhasil ");
+                win=true;
+            }else{
+                stackDFSClose.add(x);
+                String temp="";
+                temp = down(x, pos);
+                if (!(temp.equals("-1")))
+                    stackDFSOpen.add(temp);
+                temp = right(x, pos);
+                if (!(temp.equals("-1")))
+                    stackDFSOpen.add(temp);
+                temp = left(x, pos);
+                if (!(temp.equals("-1")))
+                    stackDFSOpen.add(temp);
+                temp = up(x, pos);
+                if (!(temp.equals("-1")))
+                     stackDFSOpen.add(temp);
+            }
+        }
+    }
 
     public void bdr_onclick(View view){
-        proses.setText("Proses : Proses Bi-Bfs");
-        queueBDR1Open.clear();
-        stackBDR1Close.clear();
+        queueBDR1Open = new LinkedList<>();
+        stackBDR1Close= new Stack<>();
 
-        queueBDR2Open.clear();
-        stackBDR2Close.clear();
+        queueBDR2Open = new LinkedList<>();
+        stackBDR2Close= new Stack<>();
 
         queueBDR1Open.add(new bfs(getState(),null));
         queueBDR2Open.add(new bfs(WinState,null));
-        stateJawaban.clear();
+        stateJawaban=new ArrayList<>();
         bfs x1=null;
         bfs x2=null;
-        jalan=0;
-        win=false;
         while(!queueBDR1Open.isEmpty()&&!queueBDR2Open.isEmpty()&&!win){
             x1=queueBDR1Open.peek();
             x2=queueBDR2Open.peek();
@@ -205,7 +266,6 @@ public class MainActivity extends AppCompatActivity {
             int pos1 = x1.now.indexOf("9");
             int pos2 = x2.now.indexOf("9");
 
-            stateNow=8;
             jalan++;
             if(jalan<10){
                 System.out.println("1");
@@ -215,7 +275,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if(stackBDR1Close.contains(open2.now)||stackBDR2Close.contains(open1.now)){
-                proses.setText("Proses : Ketemu Bi-Bfs");
 
                 stateJawabanNow=0;
                 bfs lastBfs1=null;
@@ -224,9 +283,17 @@ public class MainActivity extends AppCompatActivity {
                 if(stackBDR2Close.contains(open1.now)){
                     lastBfs1=open1;
                     lastBfs2=stackBDR2Close2.elementAt(stackBDR2Close.search(open1.now)-1);
+//                    cetak(lastBfs1.now);
+//                    cetak(lastBfs2.now);
+//                    cetak(lastBfs1.parent.now);
+//                    cetak(lastBfs2.parent.now);
                 }else{
                     lastBfs1=stackBDR1Close2.elementAt(stackBDR1Close.search(open2.now)-1);
                     lastBfs2=open2;
+//                    cetak(lastBfs1.now);
+//                    cetak(lastBfs2.now);
+//                    cetak(lastBfs1.parent.now);
+//                    cetak(lastBfs2.parent.now);
                 }
 
 
@@ -247,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
                 stateJawaban.add(lastBfs2.now);
 
 
+//                Log.i(TAG, "bfs_onclick: "+stateJawaban);
                 Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "bfs_onclick: Berhasil ");
                 win=true;
@@ -351,6 +419,95 @@ public class MainActivity extends AppCompatActivity {
             return "-1";
     }
 
+//
+//    public void bdr_onclick2(View view){
+//        queueBDR1Open = new LinkedList<>();
+//        stackBDR1Close= new Stack<>();
+//
+//        queueBDR1Open.add(getState());
+//        queueBDR1Open.add(WinState);
+//
+//
+//        String x1="";
+//        String x2="";
+//        while(!queueBDR1Open.isEmpty()&&!win){
+//            x1=queueBDR1Open.peek();
+//            stackBDR1Close.add(x1);
+//            queueBDR1Open.remove(x1);
+//
+//            x2=queueBDR1Open.peek();
+//            stackBDR1Close.add(x2);
+//            queueBDR1Open.remove(x2);
+//
+//            int pos1 = x1.indexOf("9");
+//            int pos2 = x2.indexOf("9");
+//
+//            jalan++;
+//            if(jalan%5000==0){
+//                Log.i(TAG, "bfs_onclick: state "+jalan);
+//            }
+//
+//
+//
+//            if(x1.equals(x2)||win==true){
+//
+//                Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show();
+//                Log.i(TAG, "bfs_onclick: Berhasil ");
+//                win=true;
+//            }else{
+//                String temp="";
+//                temp = downBDR(x1, pos1);
+//                if (!(temp.equals("-1"))){
+//                    queueBDR1Open.add(temp);
+////                    lBfs.add(new bfs(temp,x));
+//                }
+//
+//                temp = downBDR(x2, pos2);
+//                if (!(temp.equals("-1"))){
+//                    queueBDR1Open.add(temp);
+////                    lBfs.add(new bfs(temp,x));
+//                }
+//
+//                temp = upBDR(x1, pos1);
+//                if (!(temp.equals("-1"))){
+//                    queueBDR1Open.add(temp);
+////                    lBfs.add(new bfs(temp,x));
+//                }
+//
+//                temp = upBDR(x2, pos2);
+//                if (!(temp.equals("-1"))){
+//                    queueBDR1Open.add(temp);
+////                    lBfs.add(new bfs(temp,x));
+//                }
+//
+//                temp = leftBDR(x1, pos1);
+//                if (!(temp.equals("-1"))){
+//                    queueBDR1Open.add(temp);
+////                    lBfs.add(new bfs(temp,x));
+//                }
+//
+//                temp = leftBDR(x2, pos2);
+//                if (!(temp.equals("-1"))){
+//                    queueBDR1Open.add(temp);
+////                    lBfs.add(new bfs(temp,x));
+//                }
+//
+//                temp = rightBDR(x1, pos1);
+//                if (!(temp.equals("-1"))){
+//                    queueBDR1Open.add(temp);
+////                    lBfs.add(new bfs(temp,x));
+//                }
+//
+//                temp = rightBDR(x2, pos2);
+//                if (!(temp.equals("-1"))){
+//                    queueBDR1Open.add(temp);
+////                    lBfs.add(new bfs(temp,x));
+//                }
+//            }
+//
+//
+//        }
+//    }
 
     public int findCost(String now){
         int cost=0;
@@ -366,14 +523,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void astar_onclick(View view) {
-        proses.setText("Proses : Proses Astar");
-        pkAsterOpen.clear();;
-        stackAstarClose.clear();
-
+//        pkAsterOpen = new PriorityQueue<astar>(comp);
+        stackAstarClose= new Stack<>();
         pkAsterOpen.add(new astar(getState(),null,9999,0));
-        stateJawaban.clear();
-        win=false;
-        jalan=0;
+
         String x="";
         while(!pkAsterOpen.isEmpty()&&!win){
             x=pkAsterOpen.peek().now;
@@ -383,8 +536,12 @@ public class MainActivity extends AppCompatActivity {
             int pos = x.indexOf("9");
 
             jalan++;
+            if(jalan<10){
+                System.out.println(parent.cost+" "+parent.depth);
+                cetak(x);
+            }
+
             if(x.equals(WinState)){
-                proses.setText("Proses : Ketemu Astar");
 
                 stateJawabanNow=0;
                 astar lastAster = parent;
@@ -399,7 +556,8 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = jawaban.size()-1; i >=0 ; i--) {
                     stateJawaban.add(jawaban.get(i).now);
                 }
-                stateNow=8;
+
+                Log.i(TAG, "bfs_onclick: "+stateJawaban);
                 Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "bfs_onclick: Berhasil ");
                 win=true;
@@ -497,16 +655,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bfs_onclick(View view) {
-        proses.setText("Proses : Bfs Bdr");
-        queueBFSOpen.clear();
-        stackBFSClose.clear();
-        lBfs.clear();
+        queueBFSOpen = new LinkedList<>();
+        stackBFSClose= new Stack<>();
+        lBfs = new ArrayList<>();
         queueBFSOpen.add(new bfs(getState(),null));
         lBfs.add(new bfs(getState(),null));
-        stateJawaban.clear();
-        win=false;
+        stateJawaban=new ArrayList<>();
         String x="";
-        jalan=0;
         int ind=0;
         while(!queueBFSOpen.isEmpty()&&!win){
             x=queueBFSOpen.peek().now;
@@ -523,10 +678,12 @@ public class MainActivity extends AppCompatActivity {
             int pos = x.indexOf("9");
 
             jalan++;
+            if(jalan%5000==0){
+                Log.i(TAG, "bfs_onclick: state "+jalan);
+            }
 
             if(x.equals(WinState)){
 
-                proses.setText("Proses : Ketemu Bdr");
                 stateJawabanNow=0;
 //                int idx=-1;
 //                for (int i = 0; i < lBfs.size()-1; i++) {
@@ -560,7 +717,6 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("size "+jawaban.get(i).now);
                     stateJawaban.add(jawaban.get(i).now);
                 }
-                stateNow=8;
 
                 Log.i(TAG, "bfs_onclick: "+stateJawaban);
                 Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show();
@@ -708,7 +864,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setText("");
         swap(listPuzzle.get(4).getBtn(),listPuzzle.get(7).getBtn());
         swap(listPuzzle.get(4).getBtn(),listPuzzle.get(8).getBtn());
-        stateNow = 4;
+        stateNow = 9;
     }
 
     public void swap(Button b1,Button b2){// swap antara kosong dan yang di tekan
