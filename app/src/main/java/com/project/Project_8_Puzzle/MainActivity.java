@@ -80,22 +80,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // Astar
-//    Comparator<astar> comp = new Comparator<astar>() {
-//        @Override
-//        public int compare(astar s1, astar s2) {
-//            int a = s1.cost+s1.depth;
-//            int b = s2.cost+s2.depth;
-//            if(a<b){
-//                return -1;
-//            }else if(a>b){
-//                return 1;
-//            }else{
-//                return 0;
-//            }
-//        }
-//    };
-
     PriorityQueue<astar> pkAsterOpen = new PriorityQueue<astar>(99999,new CompareAstar());
     Stack<String> stackAstarClose= new Stack<>();
 
